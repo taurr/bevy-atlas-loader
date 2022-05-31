@@ -1,0 +1,112 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Test",
+      "detail": "Runs all tests",
+      "type": "shell",
+      "command": "cargo t",
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "focus": true
+      }
+    },
+    {
+      "label": "Run",
+      "detail": "Runs example 'load_atlas'",
+      "type": "shell",
+      "command": "cargo run --example load_atlas",
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Check all-features",
+      "detail": "Run a compile check against all features",
+      "type": "shell",
+      "command": "cargo check --all-features --all-targets",
+      "problemMatcher": ["$rustc"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Build release",
+      "detail": "Make a release build",
+      "type": "shell",
+      "command": "cargo build --release",
+      "problemMatcher": ["$rustc"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Update",
+      "detail": "Update dependencies (Cargo.lock)",
+      "type": "shell",
+      "command": "cargo update",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Clippy",
+      "detail": "Look for Clippy errors",
+      "type": "shell",
+      "command": "cargo clippy --all-features --all-targets -- -D warnings",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Format",
+      "detail": "Format all source",
+      "type": "shell",
+      "command": "cargo fmt --all --quiet",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    }
+  ]
+}

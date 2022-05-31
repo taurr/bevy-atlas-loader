@@ -1,0 +1,12 @@
+({
+    "Pacman": (
+        texture: "Pac-Man.png",
+        width: 19,
+        height: 19,
+        positions: [
+            (65, 86),
+            (86, 86),
+            (107, 86),
+        ]
+    )
+})

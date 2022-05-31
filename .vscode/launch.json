@@ -1,0 +1,60 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug example 'load_atlas'",
+      "cargo": {
+        "args": ["build", "--example=load_atlas"]
+      },
+      "args": [],
+      "env": {
+        "CARGO_MANIFEST_DIR": "${workspaceFolder}"
+      },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug integration test 'example_test'",
+      "preLaunchTask": "link_assets",
+      "cargo": {
+        "args": ["test", "--no-run", "--test=example_test"]
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'fun2d'",
+      "preLaunchTask": "link_assets",
+      "cargo": {
+        "args": ["test", "--no-run", "--bin=fun2d"]
+      },
+      "args": [],
+      "env": {
+        "CARGO_MANIFEST_DIR": "${workspaceFolder}"
+      },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in library 'fun2d'",
+      "preLaunchTask": "link_assets",
+      "cargo": {
+        "args": ["test", "--no-run", "--lib", "--package=fun2d"]
+      },
+      "args": [],
+      "env": {
+        "CARGO_MANIFEST_DIR": "${workspaceFolder}"
+      },
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
