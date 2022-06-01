@@ -9,6 +9,7 @@ readme = "README.md"
 bevy = { version = "0.7.0", default-features = false, features = ["render"] }
 strum = { version = "0.24.0" }
 derive_more = "0.99.17"
+enum_default = "0.2.5"
 serde = { version = "1.0.137", features = ["derive"] }
 
 [dev-dependencies]

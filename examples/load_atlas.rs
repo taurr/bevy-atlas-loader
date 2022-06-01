@@ -1,24 +1,27 @@
 use bevy::prelude::*;
 use bevy_atlas_loader::{
-    atlas_textures_created, AtlasDefinitions, AtlasTexturePlugin, AtlasTextures,
-    AtlasTexturesEvent, GenericAtlasDefinitions,
+    atlas_textures_created, AtlasTexturePlugin, AtlasTextures, AtlasTexturesEvent,
+    GenericAtlasDefinitions, ResourceStatus, TypedAtlasDefinition,
 };
 use bevy_common_assets::ron::RonAssetPlugin;
 use iyes_loopless::prelude::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 enum GameState {
-    LoadingResources,
+    Initialize,
     Running,
 }
 
-#[derive(Debug, PartialEq, Eq, Hash, strum::EnumVariantNames, strum::EnumString)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, strum::EnumVariantNames, strum::EnumString)]
 enum AtlasTextureIndex {
     Pacman,
 }
 
-#[derive(Debug, Component, Copy, Clone)]
-struct UsesAtlasTexture<T>(pub T);
+#[derive(Debug, Component, Clone, Copy)]
+struct UsesAtlasTexture<T>(T);
+
+#[derive(Debug, Component, Deref, DerefMut)]
+struct AtlasAnimationTimer(Timer);
 
 fn main() {
     let mut app = App::new();
@@ -36,18 +39,18 @@ fn main() {
     app.add_plugin(RonAssetPlugin::<GenericAtlasDefinitions>::new(&[
         "atlasmap",
     ]))
-    .add_plugin(AtlasTexturePlugin::<AtlasTextureIndex>::new());
+    .add_plugin(AtlasTexturePlugin::<AtlasTextureIndex>::default());
 
-    app.add_loopless_state(GameState::LoadingResources);
+    app.add_loopless_state(GameState::Initialize);
 
-    app.add_enter_system(GameState::LoadingResources, setup_resources)
+    app.add_enter_system(GameState::Initialize, setup_resources)
         .add_system_set(
             ConditionSet::new()
-                .run_in_state(GameState::LoadingResources)
-                .run_if(atlas_textures_created::<AtlasTextureIndex>)
-                .with_system(|mut commands: Commands| {
-                    commands.insert_resource(NextState(GameState::Running));
-                })
+                .run_in_state(GameState::Initialize)
+                .with_system(
+                    change_state(GameState::Running)
+                        .run_if(atlas_textures_created::<AtlasTextureIndex>),
+                )
                 .into(),
         );
 
@@ -55,18 +58,28 @@ fn main() {
         .add_system_set(
             ConditionSet::new()
                 .run_in_state(GameState::Running)
-                .with_system(update_atlas_textures::<AtlasTextureIndex>)
+                .with_system(animate_textures)
+                .with_system(update_reloaded_textures::<AtlasTextureIndex>)
                 .into(),
         );
 
     app.run();
 }
 
+fn change_state<T>(next_state: T) -> impl Fn(Commands)
+where
+    T: Copy + Send + Sync + 'static,
+{
+    move |mut commands: Commands| {
+        commands.insert_resource(NextState(next_state));
+    }
+}
+
 fn setup_resources(mut commands: Commands, asset_server: Res<AssetServer>) {
     asset_server.watch_for_changes().unwrap();
-
-    let handle: Handle<GenericAtlasDefinitions> = asset_server.load("sprite_sheets.atlasmap");
-    commands.insert_resource(AtlasDefinitions::<AtlasTextureIndex>::from(handle));
+    commands.insert_resource(TypedAtlasDefinition::<AtlasTextureIndex>::from(
+        asset_server.load("sprite_sheets.atlasmap"),
+    ));
 }
 
 fn setup_game(mut commands: Commands, atlas_textures: Res<AtlasTextures<AtlasTextureIndex>>) {
@@ -83,20 +96,42 @@ fn setup_game(mut commands: Commands, atlas_textures: Res<AtlasTextures<AtlasTex
             texture_atlas: atlas_textures[AtlasTextureIndex::Pacman].clone(),
             ..Default::default()
         })
-        .insert(UsesAtlasTexture(AtlasTextureIndex::Pacman));
+        .insert(UsesAtlasTexture(AtlasTextureIndex::Pacman))
+        .insert(AtlasAnimationTimer(Timer::from_seconds(1.0 / 5.0, true)));
 }
 
-fn update_atlas_textures<T: Send + Sync + Eq + core::hash::Hash + 'static>(
+fn update_reloaded_textures<T: Send + Sync + Eq + core::hash::Hash + 'static>(
     mut asset_events: EventReader<AtlasTexturesEvent<T>>,
     atlas_texture_index: Query<(Entity, &UsesAtlasTexture<T>)>,
     mut commands: Commands,
     atlas_textures: Res<AtlasTextures<T>>,
 ) {
-    for _ev in asset_events.iter() {
-        if let Ok((entity, UsesAtlasTexture(index))) = atlas_texture_index.get_single() {
+    for _ in asset_events
+        .iter()
+        .filter(|ev| ev.state() == ResourceStatus::Created)
+    {
+        if let Ok((entity, index)) = atlas_texture_index.get_single() {
             commands
                 .entity(entity)
-                .insert(atlas_textures[index].clone());
+                .insert(atlas_textures[&index.0].clone());
+        }
+    }
+}
+
+fn animate_textures(
+    mut query: Query<(
+        &mut AtlasAnimationTimer,
+        &mut TextureAtlasSprite,
+        &Handle<TextureAtlas>,
+    )>,
+    texture_assets: Res<Assets<TextureAtlas>>,
+    time: Res<Time>,
+) {
+    for (mut timer, mut sprite_texture, texture_handle) in query.iter_mut() {
+        if timer.tick(time.delta()).just_finished() {
+            if let Some(texture_atlas) = texture_assets.get(texture_handle.id) {
+                sprite_texture.index = (sprite_texture.index + 1) % texture_atlas.len();
+            }
         }
     }
 }
