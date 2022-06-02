@@ -1,6 +1,7 @@
 #![deny(unsafe_code)]
 
 use bevy::{prelude::*, sprite::TextureAtlas, utils::HashMap};
+use derive_more::IsVariant;
 use std::marker::PhantomData;
 
 pub use self::definitions::*;
@@ -37,7 +38,13 @@ where
 #[derive(Debug, Clone, Copy)]
 pub struct AtlasTexturesEvent<T>(ResourceStatus, PhantomData<T>);
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+impl<T> AtlasTexturesEvent<T> {
+    pub fn status(&self) -> ResourceStatus {
+        self.0
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy, IsVariant)]
 pub enum ResourceStatus {
     Created,
     Failed,
