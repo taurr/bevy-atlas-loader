@@ -1,4 +1,4 @@
-use self::common::minimal_bevy_app;
+use crate::common::minimal_bevy_app;
 use bevy_atlas_loader::AtlasTexturePlugin;
 
 mod common;
