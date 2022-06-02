@@ -1,3 +1,4 @@
+use crate::common::minimal_bevy_app;
 use bevy::{prelude::*, utils::HashMap};
 use bevy_atlas_loader::{
     AtlasDefinition, AtlasTexturePlugin, AtlasTextures, AtlasTexturesEvent, GridAtlasDefinition,
@@ -7,8 +8,6 @@ use std::{
     path::Path,
     sync::{atomic::AtomicBool, Arc},
 };
-
-use crate::common::minimal_bevy_app;
 
 mod common;
 
