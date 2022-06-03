@@ -48,7 +48,7 @@ fn definition_can_be_specified_manually() {
         .world
         .get_resource::<AtlasTextures<MyAtlasTextures>>()
         .unwrap();
-    let _texture_atlas_handle = &resource[MyAtlasTextures::Pacman];
+    let _texture_atlas_handle = &resource.handle(MyAtlasTextures::Pacman);
 }
 
 #[test]

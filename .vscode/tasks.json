@@ -36,6 +36,30 @@
       }
     },
     {
+      "label": "Open doc",
+      "detail": "Open the documentation",
+      "type": "shell",
+      "command": "cargo doc --open",
+      "problemMatcher": ["$rustc"],
+      "dependsOn": "Build doc"
+    },
+    {
+      "label": "Build doc",
+      "detail": "Builds the documentation",
+      "type": "shell",
+      "command": "cargo doc",
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
       "label": "Check all-features",
       "detail": "Run a compile check against all features",
       "type": "shell",

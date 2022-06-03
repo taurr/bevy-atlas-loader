@@ -9,16 +9,68 @@ pub(crate) trait GetTextureAtlas {
     fn texture_atlas(&self) -> Option<&Handle<TextureAtlas>>;
 }
 
-/// Map with [AtlasDefinition] for a named set of [TextureAtlas].
+/// Map with [AtlasDefinition]s for a creating a specific [AtlasTextures<T>](crate::AtlasTextures<T>)
+/// resource.
 ///
-/// Can be loaded as an asset by using e.g. [bevy_common_assets](https://crates.io/crates/bevy_common_assets).
+/// Used when loading the definitions as assets using e.g.
+/// [bevy_common_assets](https://crates.io/crates/bevy_common_assets).
 ///
-/// Can be used to create a [TypedAtlasDefinition<T>].
+/// # Example:
+/// ```
+/// # use bevy::{
+/// #     prelude::*,
+/// #     utils::HashMap,
+/// #     asset::AssetPlugin,
+/// #     core_pipeline::CorePipelinePlugin,
+/// #     render::{settings::WgpuSettings, RenderPlugin},
+/// #     sprite::SpritePlugin,
+/// #     window::WindowPlugin,
+/// #     MinimalPlugins,
+/// # };
+/// # use bevy_common_assets::ron::RonAssetPlugin;
+/// # use bevy_atlas_loader::*;
+/// # use std::{
+/// #     path::Path,
+/// #     sync::{atomic::AtomicBool, Arc},
+/// # };
+/// #
+/// #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+/// #[derive(strum::EnumVariantNames, strum::EnumString)]
+/// enum MyAtlasTextures {
+///     Pacman,
+/// }
+///
+/// let mut app = App::default();
+/// # app.add_plugins(MinimalPlugins)
+/// #     .insert_resource(WgpuSettings {
+/// #         backends: None,
+/// #         ..Default::default()
+/// #     })
+/// #     .add_plugin(WindowPlugin::default())
+/// #     .add_plugin(AssetPlugin::default())
+/// #     .add_plugin(RenderPlugin::default())
+/// #     .add_plugin(CorePipelinePlugin::default())
+/// #     .add_plugin(SpritePlugin::default());
+///
+/// // we like to load definitions for all AtlasTexturePlugin<T> as assets
+/// app.add_plugin(RonAssetPlugin::<GenericAtlasDefinitions>::new(&[
+///     "atlasmap",
+/// ]));
+///
+/// app.add_plugin(AtlasTexturePlugin::<MyAtlasTextures>::default());
+/// app.add_startup_system(move |mut cmds: Commands, assets: Res<AssetServer>| {
+///     cmds.insert_resource(TypedAtlasDefinition::<MyAtlasTextures>::from(
+///         assets.load("sprite_sheets.atlasmap"),
+///     ));
+/// });
+/// ```
 #[derive(Debug, Deserialize, TypeUuid, Deref, DerefMut, Constructor, Default, From)]
 #[uuid = "ef608653-e978-4a71-98e5-05c55911cfc0"]
 pub struct GenericAtlasDefinitions(HashMap<String, AtlasDefinition>);
 
 /// Defines how a [TextureAtlas] is to be created from 1 or more textures.
+///
+/// See [GenericAtlasDefinitions].
 ///
 /// # Example:
 /// ```rust
@@ -129,11 +181,60 @@ pub enum MultiTextureProcessState {
     AtlasCreated(Handle<TextureAtlas>),
 }
 
-/// Resource specifying how a set of [TextureAtlas], defined by an enum `T`, are to be created.
+/// Resource specifying how to create a specific [AtlasTextures<T>](crate::AtlasTextures<T>).
 ///
-/// Textures are loaded as assets, then the actual [TextureAtlas] assets are created, and a
-/// resource of type [AtlasTextures<T>](super::AtlasTextures<T>) is insert to the world. Finally
-/// the event [AtlasTexturesEvent<T>](super::AtlasTexturesEvent<T>) is sent.
+/// For an example of how to load the definition as an asset, see [GenericAtlasDefinitions].
+/// # Example:
+/// ```
+/// # use bevy::{
+/// #     prelude::*,
+/// #     utils::HashMap,
+/// #     asset::AssetPlugin,
+/// #     core_pipeline::CorePipelinePlugin,
+/// #     render::{settings::WgpuSettings, RenderPlugin},
+/// #     sprite::SpritePlugin,
+/// #     window::WindowPlugin,
+/// #     MinimalPlugins,
+/// # };
+/// # use bevy_atlas_loader::*;
+/// # use std::{
+/// #     path::Path,
+/// #     sync::{atomic::AtomicBool, Arc},
+/// # };
+/// #
+/// #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+/// #[derive(strum::EnumVariantNames, strum::EnumString)]
+/// enum MyAtlasTextures {
+///     Pacman,
+/// }
+///
+/// let mut app = App::default();
+/// # app.add_plugins(MinimalPlugins)
+/// #     .insert_resource(WgpuSettings {
+/// #         backends: None,
+/// #         ..Default::default()
+/// #     })
+/// #     .add_plugin(WindowPlugin::default())
+/// #     .add_plugin(AssetPlugin::default())
+/// #     .add_plugin(RenderPlugin::default())
+/// #     .add_plugin(CorePipelinePlugin::default())
+/// #     .add_plugin(SpritePlugin::default());
+/// app.add_plugin(AtlasTexturePlugin::<MyAtlasTextures>::default());
+///
+/// app.add_startup_system(move |mut cmds: Commands| {
+///     cmds.insert_resource(TypedAtlasDefinition::<MyAtlasTextures>::from(
+///         [(
+///             String::from("Pacman"),
+///             AtlasDefinition::from(GridAtlasDefinition {
+///                 texture: Path::new("Pac-Man.png").into(),
+///                 columns: 3,
+///                 rows: 3,
+///                 tile_size: (19, 19),
+///                 ..Default::default()
+///             }),
+///         )].into_iter().collect::<HashMap<String, AtlasDefinition>>(),
+///     ));
+/// });
 #[derive(Debug)]
 #[allow(unused)]
 pub struct TypedAtlasDefinition<T> {

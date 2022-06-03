@@ -93,7 +93,7 @@ fn setup_game(mut commands: Commands, atlas_textures: Res<AtlasTextures<AtlasTex
                 custom_size: Some(Vec2::new(128.0, 128.0)),
                 ..Default::default()
             },
-            texture_atlas: atlas_textures[AtlasTextureIndex::Pacman].clone(),
+            texture_atlas: atlas_textures.handle(AtlasTextureIndex::Pacman),
             ..Default::default()
         })
         .insert(UsesAtlasTexture(AtlasTextureIndex::Pacman))
@@ -113,7 +113,7 @@ fn update_reloaded_textures<T: Send + Sync + Eq + core::hash::Hash + 'static>(
         if let Ok((entity, index)) = atlas_texture_index.get_single() {
             commands
                 .entity(entity)
-                .insert(atlas_textures[&index.0].clone());
+                .insert(atlas_textures.handle(&index.0));
         }
     }
 }

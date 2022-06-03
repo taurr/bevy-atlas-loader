@@ -3,7 +3,7 @@ use std::{any::type_name, marker::PhantomData};
 use strum::VariantNames;
 
 use crate::{
-    AtlasDefinition, AtlasTextures, AtlasTexturesEvent, DefinitionProcessState,
+    AtlasDefinition, AtlasTextures, AtlasTexturesEvent, CreatedAtlas, DefinitionProcessState,
     FolderAtlasDefinition, GenericAtlasDefinitions, GetTextureAtlas, GridAtlasDefinition,
     MultiTextureProcessState, PatchAtlasDefinition, ResourceStatus, SingleTextureProcessState,
     TypedAtlasDefinition,
@@ -114,7 +114,8 @@ pub fn process_atlas_definitions<T>(
                     commands.insert_resource(AtlasTextures::<T>(
                         map.map(|(key, handle)| {
                             let key = T::from_str(&key).unwrap();
-                            (key, handle)
+                            let len = texture_atlases.get(&handle).unwrap().len();
+                            (key, CreatedAtlas { handle, len })
                         })
                         .collect(),
                     ));
