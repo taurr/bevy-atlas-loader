@@ -1,7 +1,5 @@
 # Bevy-atlas-loader
 
-**WIP**, not yet released...
-
 This crate enables the developer to define a number of [TextureAtlas] for use as sprites in [Bevy].
 
 The atlas definition supports several styles of atlas':
@@ -56,16 +54,13 @@ bevy_common_assets = "<insert version>"
 
 Please have a look at the examples, and even the tests.
 
-**TODO:** more tests
+# License
 
-**TODO:** documentation
+Licensed under either of
 
-**TODO:** lift generic requirements?
-
-**TODO:** github CI
-
-**TODO:** github/crates.io links in README.md
-
+* Apache License, Version 2.0 ([LICENSE-APACHE] or http://www.apache.org/licenses/LICENSE-2.0)
+* MIT license ([LICENSE-MIT] or http://opensource.org/licenses/MIT)
+at your option.
 
 ---
 This project uses [Bevy], and was bootstrapped using [bevy-template.rs].
@@ -77,3 +72,5 @@ This project uses [Bevy], and was bootstrapped using [bevy-template.rs].
 [bevy-atlas-loader]:https://crates.io/crates/strum
 [strum]:https://crates.io/crates/strum
 [Traits]:https://doc.rust-lang.org/book/ch10-02-traits.html
+[LICENSE-APACHE]:LICENSE-APACHE
+[LICENSE-MIT]:LICENSE-MIT

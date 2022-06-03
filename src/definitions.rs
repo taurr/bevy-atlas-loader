@@ -38,7 +38,6 @@ pub enum AtlasDefinition {
     Grid(GridAtlasDefinition),
     Manual(PatchAtlasDefinition),
     Folder(FolderAtlasDefinition),
-    // TODO: FileList
 }
 
 /// Defines a [TextureAtlas] composed from a grid of an image.
