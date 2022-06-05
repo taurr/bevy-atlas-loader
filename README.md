@@ -1,5 +1,9 @@
 # Bevy-atlas-loader
 
+[![Build Status](https://github.com/taurr/bevy-atlas-loader/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/taurr/bevy-atlas-loader/actions?query=branch%3Amain++)
+[![Latest version](https://img.shields.io/crates/v/bevy-atlas-loader.svg)](https://crates.io/crates/bevy-atlas_loader)
+[![Documentation](https://docs.rs/bevy-atlas-loader/badge.svg)](https://docs.rs/bevy-atlas-loader)
+
 This crate enables the developer to define a number of [TextureAtlas] for use as sprites in [Bevy].
 
 The atlas definition supports several styles of atlas':
