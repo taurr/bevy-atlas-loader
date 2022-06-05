@@ -21,7 +21,6 @@
       "type": "lldb",
       "request": "launch",
       "name": "Debug integration test 'example_test'",
-      "preLaunchTask": "link_assets",
       "cargo": {
         "args": ["test", "--no-run", "--test=example_test"]
       },
@@ -32,7 +31,6 @@
       "type": "lldb",
       "request": "launch",
       "name": "Debug unit tests in executable 'fun2d'",
-      "preLaunchTask": "link_assets",
       "cargo": {
         "args": ["test", "--no-run", "--bin=fun2d"]
       },
@@ -46,7 +44,6 @@
       "type": "lldb",
       "request": "launch",
       "name": "Debug unit tests in library 'fun2d'",
-      "preLaunchTask": "link_assets",
       "cargo": {
         "args": ["test", "--no-run", "--lib", "--package=fun2d"]
       },
