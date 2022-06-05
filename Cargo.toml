@@ -25,6 +25,7 @@ include = [
     "CHANGELOG.md",
 ]
 edition = "2021"
+resolver = "2"
 
 [dependencies]
 bevy = { version = "0.7.0", default-features = false, features = ["render"] }

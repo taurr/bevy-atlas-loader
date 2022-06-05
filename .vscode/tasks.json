@@ -7,7 +7,7 @@
       "label": "Test",
       "detail": "Runs all tests",
       "type": "shell",
-      "command": "cargo t",
+      "command": "cargo t --features bevy/dynamic",
       "problemMatcher": ["$rustc"],
       "group": "build",
       "presentation": {
@@ -17,46 +17,6 @@
         "showReuseMessage": true,
         "clear": true,
         "focus": true
-      }
-    },
-    {
-      "label": "Run",
-      "detail": "Runs example 'load_atlas'",
-      "type": "shell",
-      "command": "cargo run --example load_atlas",
-      "problemMatcher": ["$rustc"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared",
-        "showReuseMessage": true,
-        "focus": true,
-        "clear": true
-      }
-    },
-    {
-      "label": "Open doc",
-      "detail": "Open the documentation",
-      "type": "shell",
-      "command": "cargo doc --open",
-      "problemMatcher": ["$rustc"],
-      "dependsOn": "Build doc"
-    },
-    {
-      "label": "Build doc",
-      "detail": "Builds the documentation",
-      "type": "shell",
-      "command": "cargo doc",
-      "problemMatcher": ["$rustc"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared",
-        "showReuseMessage": true,
-        "focus": true,
-        "clear": true
       }
     },
     {
@@ -88,6 +48,46 @@
         "focus": true,
         "clear": true
       }
+    },
+    {
+      "label": "Run",
+      "detail": "Runs example 'load_atlas'",
+      "type": "shell",
+      "command": "cargo run --features bevy/dynamic --example load_atlas",
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Build doc",
+      "detail": "Builds the documentation",
+      "type": "shell",
+      "command": "cargo doc",
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": true,
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "Open doc",
+      "detail": "Open the documentation",
+      "type": "shell",
+      "command": "cargo doc --open",
+      "problemMatcher": ["$rustc"],
+      "dependsOn": "Build doc"
     },
     {
       "label": "Update",
