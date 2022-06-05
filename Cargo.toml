@@ -1,9 +1,30 @@
 [package]
 name = "bevy-atlas-loader"
 version = "0.1.0"
-edition = "2021"
 authors = ["Johnny T. Vestergaard <jtv@jrtv.dk>"]
 readme = "README.md"
+description = """
+Bevy plugin for defining and loading 2D TextureAtlas images.
+"""
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/taurr/bevy-atlas-loader"
+documentation = "https://docs.rs/bevy-atlas-loader"
+keywords = ["bevy", "plugin", "asset"]
+categories = [
+    "game-development",
+    "rendering::data-formats",
+    "graphics",
+    "config",
+]
+include = [
+    "src/",
+    "examples/",
+    "tests/",
+    "LICENSE-*",
+    "README.md",
+    "CHANGELOG.md",
+]
+edition = "2021"
 
 [dependencies]
 bevy = { version = "0.7.0", default-features = false, features = ["render"] }
@@ -14,10 +35,10 @@ serde = { version = "1.0.137", features = ["derive"] }
 
 [dev-dependencies]
 bevy = "0.7.0"
+strum = { version = "0.24.0", features = ["derive"] }
 iyes_loopless = "0.5.1"
 bevy_common_assets = { version = "0.2.0", features = ["ron"] }
 ron = "0.7.0"
-strum = { version = "0.24.0", features = ["derive"] }
 indoc = "1.0.6"
 anyhow = "1.0.57"
 
